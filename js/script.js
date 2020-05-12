@@ -189,6 +189,7 @@ registerButton.addEventListener('click', (e) => {
     // define error message to apply if name field is not valid
     let nameError = document.createElement('p');
     nameError.textContent = 'Please enter first and last name separated by a space. Characters A-Z only.';
+    nameError.style.color = 'red';
     // if name field is invalid, apply above error message
     if (!isValidName()) {
         nameLabel.appendChild(nameError);
@@ -201,6 +202,7 @@ registerButton.addEventListener('click', (e) => {
     };
     let emailError = document.createElement('p');
     emailError.textContent = 'Please enter a valid email address.';
+    emailError.style.color = 'red';
     if (!isValidEmail()) {
         emailLabel.appendChild(emailError);
     };
@@ -235,8 +237,8 @@ registerButton.addEventListener('click', (e) => {
         ccNum.style.borderColor = 'rgb(111, 157, 220)';
         zipLabel.style.color = 'black';
         zip.style.borderColor = 'rgb(111, 157, 220)';
-        ccvLabel.style.color = 'black';
-        ccv.style.borderColor = 'rgb(111, 157, 220)';
+        cvvLabel.style.color = 'black';
+        cvv.style.borderColor = 'rgb(111, 157, 220)';
     };
 
     // remove registration error message if it already exists
@@ -247,7 +249,7 @@ registerButton.addEventListener('click', (e) => {
     // create message to be displayed if registration is unsuccessful
     let registerMessage = document.createElement('p');
     // if any error messages exist from validations above, then do not refresh page and display error message
-    if (document.querySelector("[style='color: red;']") || document.querySelector("[style='border-color: red;']")) {
+    if (notValid()) {
         e.preventDefault();
         registerMessage.textContent = 'Please fix the above issues marked in the color Red.';
         registerMessage.style.color = 'red';
@@ -255,6 +257,20 @@ registerButton.addEventListener('click', (e) => {
         registerButton.parentNode.insertBefore(registerMessage, registerButton);
     };
 });
+
+// function to check that all fields are valid - conditionals for optional fields
+function notValid() {
+    if (isValidName() && isValidEmail() && isValidTShirt() && isValidShops()) {
+        return false;
+    }
+    if (jobSelector.value === 'other' && isValidTitle()) {
+        return false;
+    }
+    if (paymentSelector.selectedIndex === 1 && isValidCC() && isValidZip() && isValidCVV()) {
+        return false;
+    }
+    return true;
+};
 
 // function to change display styles red if validation function returns false and set display back to default if returns true
 function changeTextField(fieldName, fieldLabel, validateFunc) {
